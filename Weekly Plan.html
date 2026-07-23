@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Kyle Kim · Weekly Training Plan — Final</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #0A0A0F; color: #E8E8F0; font-family: -apple-system, 'Inter', sans-serif; padding-bottom: 80px; }
+::-webkit-scrollbar { display: none; }
+button { cursor: pointer; font-family: inherit; }
+.header { padding: 36px 20px 16px; border-bottom: 1px solid #1A1A2A; }
+.eyebrow { font-size: 10px; letter-spacing: 3px; color: #444460; font-weight: 700; margin-bottom: 4px; }
+.title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+.subtitle { font-size: 12px; color: #444460; margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; }
+.tag { border: 1px solid #1A1A2A; border-radius: 4px; padding: 2px 8px; font-size: 10px; letter-spacing: 1px; color: #444460; }
+.day-scroll { display: flex; overflow-x: auto; padding: 12px 20px; gap: 8px; border-bottom: 1px solid #1A1A2A; scrollbar-width: none; }
+.day-btn { flex-shrink: 0; padding: 8px 16px; border-radius: 8px; border: 1.5px solid #1A1A2A; background: transparent; color: #333350; font-weight: 700; font-size: 11px; letter-spacing: 1px; transition: all 0.15s; }
+.day-btn.active { border-color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); color: var(--c); }
+.day-btn .skate { font-size: 8px; display: block; margin-top: 2px; color: #333350; }
+.day-btn.active .skate { color: var(--c); opacity: 0.7; }
+.day-content { display: none; padding: 20px; }
+.day-content.active { display: block; }
+.day-header { margin-bottom: 20px; }
+.day-tag { font-size: 10px; letter-spacing: 2.5px; font-weight: 700; margin-bottom: 4px; }
+.day-title { font-size: 22px; font-weight: 800; }
+.day-meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.day-meta-item { font-size: 11px; color: #555570; border: 1px solid #1A1A2A; border-radius: 4px; padding: 3px 8px; }
+.block { margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid #1A1A2A; background: #0D0D1A; }
+.block-header { padding: 11px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1A1A2A; }
+.block-letter { font-size: 10px; font-weight: 800; letter-spacing: 1px; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.block-name { font-size: 13px; font-weight: 700; color: #E8E8F0; }
+.block-type { font-size: 10px; color: #444460; margin-top: 1px; }
+.ex-table { width: 100%; border-collapse: collapse; }
+.ex-table th { font-size: 9px; letter-spacing: 1.5px; color: #333350; padding: 7px 14px 5px; text-align: left; border-bottom: 1px solid #1A1A2A; }
+.ex-table td { padding: 9px 14px; font-size: 13px; color: #E8E8F0; border-bottom: 1px solid #0F0F1A; vertical-align: top; }
+.ex-table tr:last-child td { border-bottom: none; }
+.ex-name { font-weight: 600; }
+.ex-sets { color: #888; font-size: 12px; white-space: nowrap; }
+.ex-load { font-weight: 700; white-space: nowrap; color: #C8C8E0; }
+.ex-note { font-size: 11px; color: #555570; line-height: 1.5; }
+.special-box { margin-bottom: 16px; border-radius: 8px; padding: 12px 14px; border: 1px solid #1A1A2A; }
+.special-box.co2 { background: #0A0A16; border-left: 3px solid #F59E0B; }
+.special-box.conditioning { background: #0A0A16; border-left: 3px solid #10B981; }
+.special-box.mobility { background: #0A0A16; border-left: 3px solid #3B82F622; }
+.special-box.aerobic { background: #0A0A16; border-left: 3px solid #3B82F6; }
+.special-box.lactate { background: #0A0A16; border-left: 3px solid #EF4444; }
+.special-box.repeat-sprint { background: #0A0A16; border-left: 3px solid #EC4899; }
+.box-title { font-size: 10px; letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; }
+.box-content { font-size: 13px; color: #888; line-height: 1.9; }
+.box-content strong { color: #E8E8F0; font-weight: 600; }
+.box-content .step { display: block; padding: 3px 0; }
+.rest-day { padding: 32px 20px; }
+.rest-items { background: #0D0D1A; border-radius: 12px; padding: 16px; border: 1px solid #1A1A2A; margin-top: 16px; }
+.rest-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1A1A2A; font-size: 13px; color: #666680; line-height: 1.5; }
+.rest-item:last-child { border-bottom: none; }
+.rest-dot { width: 5px; height: 5px; border-radius: 50%; background: #333350; flex-shrink: 0; margin-top: 6px; }
+.summary-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.summary-chip { background: #0D0D1A; border: 1px solid #1A1A2A; border-radius: 6px; padding: 5px 10px; font-size: 10px; color: #555570; }
+.summary-chip span { color: #E8E8F0; font-weight: 700; }
+.section-divider { font-size: 9px; letter-spacing: 2px; color: #333350; font-weight: 700; margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #1A1A2A; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">KYLE KIM · D1 DEFENSEMAN · COLGATE</div>
+  <div class="title">WEEKLY TRAINING PLAN</div>
+  <div style="font-size:10px;color:#10B981;font-weight:700;letter-spacing:1px;margin-top:6px;">✓ FINAL VERSION — LIFTS + CONDITIONING COMPLETE</div>
+  <div class="subtitle" style="margin-top:8px;">
+    <span class="tag">6 DAYS ON / 1 OFF</span>
+    <span class="tag">4 SKATE DAYS</span>
+    <span class="tag">MIDDLETOWN SPORTS COMPLEX</span>
+    <span class="tag">PRE-SEASON SPRINT</span>
+  </div>
+</div>
+
+<div class="day-scroll">
+  <button class="day-btn active" style="--c:#3B82F6" onclick="showDay('mon',this)">MON<span class="skate">⛸ SKATE</span></button>
+  <button class="day-btn" style="--c:#EF4444" onclick="showDay('tue',this)">TUE<span class="skate">⛸ SKATE</span></button>
+  <button class="day-btn" style="--c:#10B981" onclick="showDay('wed',this)">WED<span class="skate">NO SKATE</span></button>
+  <button class="day-btn" style="--c:#F59E0B" onclick="showDay('thu',this)">THU<span class="skate">⛸ SKATE</span></button>
+  <button class="day-btn" style="--c:#8B5CF6" onclick="showDay('fri',this)">FRI<span class="skate">⛸ SKATE</span></button>
+  <button class="day-btn" style="--c:#EC4899" onclick="showDay('sat',this)">SAT<span class="skate">NO SKATE</span></button>
+  <button class="day-btn" style="--c:#333350" onclick="showDay('sun',this)">SUN<span class="skate">REST</span></button>
+</div>
+
+<!-- ==================== MONDAY ==================== -->
+<div class="day-content active" id="day-mon">
+  <div class="day-header">
+    <div class="day-tag" style="color:#3B82F6">MONDAY · SKATE MORNING → LIFT AFTERNOON</div>
+    <div class="day-title">Full Upper Body</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift est. 85 min</span>
+      <span class="day-meta-item">+ Aerobic base 20 min</span>
+      <span class="day-meta-item">Total ~105 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Lift blocks <span>A–F</span></div>
+    <div class="summary-chip">Anchor <span>Bench 5×5</span></div>
+    <div class="summary-chip">Push + Pull + Traps + Rotation</div>
+  </div>
+
+  <div class="section-divider">STRENGTH + POWER BLOCKS</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">A</div><div><div class="block-name">Heavy Push</div><div class="block-type">Straight sets · 2 min rest between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Barbell Bench Press</td><td class="ex-sets">5×5</td><td class="ex-load">155–165 lbs</td><td class="ex-note">Strength anchor. Add 5 lbs every week without exception. Top set mentality — every rep with full intent.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">B</div><div><div class="block-name">Heavy Pull</div><div class="block-type">Superset · Row set → 90s rest → Pull-Up set → 90s rest → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Barbell Row (Pendlay)</td><td class="ex-sets">4×6</td><td class="ex-load">155–165 lbs</td><td class="ex-note">Explosive pull from dead stop on floor. Controlled lower. Load is intentionally managed for superset quality — don't ego lift here.</td></tr>
+    <tr><td class="ex-name">Weighted Pull-Ups</td><td class="ex-sets">4×6</td><td class="ex-load">+20 lbs</td><td class="ex-note">Dead hang every single rep. Full shoulder engagement at bottom. No kipping — ever.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">C</div><div><div class="block-name">Accessory Push + Pull</div><div class="block-type">Superset · Incline set → 90s → Row set → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Incline DB Press</td><td class="ex-sets">4×8</td><td class="ex-load">55–60 lbs</td><td class="ex-note">3 second eccentric on the way down. Full stretch at bottom — feel the upper chest engage. No bouncing off the bottom.</td></tr>
+    <tr><td class="ex-name">Chest Supported Row</td><td class="ex-sets">4×10</td><td class="ex-load">75–80 lbs</td><td class="ex-note">Chest stays on pad — no torso rotation. Full retraction at top, 1s hold. Pure back contraction, no momentum.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">D</div><div><div class="block-name">Shoulder + Upper Back</div><div class="block-type">Superset · Landmine set → 60s → Face Pull+Lateral set → 60s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Landmine Press</td><td class="ex-sets">3×8e</td><td class="ex-load">45–55 lbs</td><td class="ex-note">Single arm. Opposite foot forward — staggered stance mirrors hockey posture. Full extension at top, controlled descent.</td></tr>
+    <tr><td class="ex-name">Face Pull + Lateral Raise</td><td class="ex-sets">3×12+12</td><td class="ex-load">Band / 20 lbs</td><td class="ex-note">Zero rest between face pull and lateral raise — they superset as one movement. Rear delt and external rotation health is non-negotiable for a defenseman taking hits.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">E</div><div><div class="block-name">Tricep + Trap</div><div class="block-type">Superset · Dips set → 90s → Shrugs set → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Weighted Dips</td><td class="ex-sets">3×8</td><td class="ex-load">+25 lbs</td><td class="ex-note">Belt loaded. Full range — chest slightly forward for chest emphasis. No half reps.</td></tr>
+    <tr><td class="ex-name">Barbell Shrugs</td><td class="ex-sets">3×12</td><td class="ex-load">205–225 lbs</td><td class="ex-note">Trap mass is protective for a defenseman — you need this. Full squeeze at top, hold 1 second. Don't roll the shoulders.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#3B82F622;color:#3B82F6">F</div><div><div class="block-name">Arm Finisher + Rotational Power + Core</div><div class="block-type">Circuit · Curl → 45s → Med Ball → 45s → Pallof → 45s → Hollow → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Incline DB Curl</td><td class="ex-sets">3×12</td><td class="ex-load">25 lbs</td><td class="ex-note">Full stretch at bottom. Slow eccentric. Bicep thickness — helps with puck battles and stick strength.</td></tr>
+    <tr><td class="ex-name">Med Ball Rotational Chest Pass</td><td class="ex-sets">3×10e</td><td class="ex-load">10–12 lbs</td><td class="ex-note">Explosive — against wall. Full trunk rotation. Snap through the hips. This is your shot power. Maximum intent every rep.</td></tr>
+    <tr><td class="ex-name">Pallof Press</td><td class="ex-sets">3×12e</td><td class="ex-load">Red band</td><td class="ex-note">Anti-rotation. Stand tall, brace hard — core resists the band, doesn't just hold a position. Both sides equal.</td></tr>
+    <tr><td class="ex-name">Hollow Body Hold</td><td class="ex-sets">3×30s</td><td class="ex-load">BW</td><td class="ex-note">Lower back pressed completely to floor. Arms overhead. Legs low. Full body tension — if you feel it in your hip flexors you're doing it right.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">SHOULDER MOBILITY — END OF SESSION</div>
+  <div class="special-box mobility">
+    <div class="box-title" style="color:#3B82F6;">SHOULDER + WRIST MOBILITY · 5 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Shoulder circles</strong> — 10 forward, 10 backward. Full range.</span>
+      <span class="step"><strong>Wrist rocks</strong> — forward, back, lateral. 30s each direction.</span>
+      <span class="step"><strong>Band pull-aparts</strong> — 2×15. Slow. Feel the rear delt and rhomboid engage.</span>
+      <span class="step"><strong>Shoulder CARs</strong> (Controlled Articular Rotations) — 5 each arm. Slow full circle.</span>
+      <span class="step"><strong>Cross-body stretch</strong> — 30s each side. Posterior capsule release.</span>
+    </div>
+  </div>
+
+  <div class="section-divider">AEROBIC BASE CONDITIONING — AFTER LIFT</div>
+  <div class="special-box aerobic">
+    <div class="box-title" style="color:#3B82F6;">AEROBIC BASE · STATIONARY BIKE · 20 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Target heart rate:</strong> 130–145 BPM (65–70% max HR). If you don't have a monitor — you should be able to hold a conversation but breathing is noticeably elevated.</span>
+      <span class="step"><strong>Resistance:</strong> Low to moderate. This is not a hard effort. Steady, continuous, controlled.</span>
+      <span class="step"><strong>Protocol:</strong> 3 min easy warm-up → 14 min steady state at target HR → 3 min easy cool-down.</span>
+      <span class="step"><strong>Why this matters:</strong> This builds the aerobic infrastructure that powers your recovery between shifts. Without this base, everything else — your CO2 work, your sprints, your power output — hits a ceiling. Boring but non-negotiable.</span>
+      <span class="step"><strong>Rule:</strong> Never go above 150 BPM. If HR climbs, drop resistance. You're building base, not training hard.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TUESDAY ==================== -->
+<div class="day-content" id="day-tue">
+  <div class="day-header">
+    <div class="day-tag" style="color:#EF4444">TUESDAY · SKATE MORNING → LIFT AFTERNOON</div>
+    <div class="day-title">Lower Power + Explosion</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift est. 90–95 min</span>
+      <span class="day-meta-item">CO2 conditioning included</span>
+      <span class="day-meta-item">Total ~105 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Blocks <span>A–G</span></div>
+    <div class="summary-chip">Anchor <span>Belt Squat + Hang Clean</span></div>
+    <div class="summary-chip">Power + Strength + Posterior Chain</div>
+  </div>
+
+  <div class="section-divider">POWER BLOCKS — FRESH CNS FIRST</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">A</div><div><div class="block-name">Vertical Explosion</div><div class="block-type">Straight sets · 90s between sets · Full reset every rep</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Box Jumps</td><td class="ex-sets">4×5</td><td class="ex-load">BW</td><td class="ex-note">Step down between every rep. Full reset — no bouncing. Max height every single rep. If you're not hitting max height, you're wasting a set.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">B</div><div><div class="block-name">Triple Extension Power</div><div class="block-type">Straight sets · 2 min between sets · CNS needs full recovery</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Hang Power Clean</td><td class="ex-sets">4×4</td><td class="ex-load">115–125 lbs</td><td class="ex-note">Full triple extension — ankle, knee, hip all extending simultaneously. This IS the skating stride pattern loaded. Explosive off the hang. If the bar crashes on you at the catch, you're muscling it — use the legs.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">C</div><div><div class="block-name">Lateral Power</div><div class="block-type">Straight sets · 90s between sets · Stick every landing</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Lateral Bound</td><td class="ex-sets">4×6e</td><td class="ex-load">BW</td><td class="ex-note">Max distance every bound. Land and hold 1 full second before going again — stick the landing. This directly trains the edge-to-edge power you use every shift. Don't rush the landing.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">STRENGTH BLOCKS</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">D</div><div><div class="block-name">Heavy Lower</div><div class="block-type">Superset · Belt Squat set → 90s → RDL set → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Belt Squat</td><td class="ex-sets">4×6</td><td class="ex-load">340–360 lbs</td><td class="ex-note">No regression from last week — minimum 340. Upright torso, drive through the floor at the bottom. Controlled descent — 2 seconds down.</td></tr>
+    <tr><td class="ex-name">Romanian Deadlift</td><td class="ex-sets">4×8</td><td class="ex-load">195–205 lbs</td><td class="ex-note">Hamstrings on maximum stretch. Hinge from the hips — don't squat down. Feel the tension from the floor up. Stop at the point of losing neutral spine.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">E</div><div><div class="block-name">Unilateral Lower</div><div class="block-type">Superset · Split Squat set → 90s → Lunge set → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Bulgarian Split Squat</td><td class="ex-sets">3×8e</td><td class="ex-load">50–60 lbs</td><td class="ex-note">Hardest movement in the program. Rear foot elevated on bench. Front foot out far enough that knee stays behind toes. Control the descent — don't drop. Own every rep.</td></tr>
+    <tr><td class="ex-name">Walking DB Lunges</td><td class="ex-sets">3×10e</td><td class="ex-load">50 lbs</td><td class="ex-note">Controlled drop. Long stride. Don't let the front knee cave inward — that's a hockey injury waiting to happen. Tall torso throughout.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">F</div><div><div class="block-name">Posterior Chain + Glute</div><div class="block-type">Circuit · GHD → 90s → Nordic → 90s → SL Thrust → 60s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">GHD Hip Extensions</td><td class="ex-sets">3×12</td><td class="ex-load">+25 lbs</td><td class="ex-note">Weighted — not bodyweight. Full extension at top, hard glute squeeze. This is your skating push-off muscle being directly loaded.</td></tr>
+    <tr><td class="ex-name">Nordic Hamstring Fall</td><td class="ex-sets">3×8</td><td class="ex-load">BW</td><td class="ex-note">Slow fall — as slow as possible. Catch with hands. Pull back up with hamstrings as much as you can before using hands. This movement alone significantly reduces hamstring injury risk. 3×8 minimum — never drop below this.</td></tr>
+    <tr><td class="ex-name">Single Leg Hip Thrust</td><td class="ex-sets">3×10e</td><td class="ex-load">BW</td><td class="ex-note">Upper back on bench. Drive through heel. 2 second squeeze at top — don't rush. Glute activation on both lower days is non-negotiable for a defenseman.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EF444422;color:#EF4444">G</div><div><div class="block-name">Core</div><div class="block-type">Circuit · Ab Wheel → 45s → ISO Hold → 45s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Ab Wheel Rollout</td><td class="ex-sets">4×10</td><td class="ex-load">BW</td><td class="ex-note">Full extension — hips absolutely cannot drop. Pull back with your lats, not just your arms. If hips drop even once, reset. Quality only.</td></tr>
+    <tr><td class="ex-name">ISO Squat Hold</td><td class="ex-sets">3×1min</td><td class="ex-load">BW</td><td class="ex-note">Thighs parallel to floor. Back against wall or freestanding. Don't break. This is your third period legs being built in real time. Mental toughness as much as physical.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">CO2 CONDITIONING — FINISHER</div>
+  <div class="special-box co2">
+    <div class="box-title" style="color:#F59E0B;">CO2 TOLERANCE · STATIONARY BIKE · 10 ROUNDS · ~20 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Round structure:</strong> <strong>30s</strong> climb at high resistance → <strong>15s</strong> easy recovery (pedal light) → <strong>15s</strong> breath hold at medium resistance → rest 15s → repeat</span>
+      <span class="step"><strong>The breath hold:</strong> Take a full breath in, exhale half, then hold. Pedal through the hold. Don't stop moving.</span>
+      <span class="step"><strong>Progression:</strong> Week 1: aim to complete 8 rounds. Week 2–3: 10 rounds. Week 4+: extend climb to 35s.</span>
+      <span class="step"><strong>Why:</strong> CO2 tolerance determines how quickly you recover between shifts. Elite hockey players have a significantly higher tolerance for CO2 buildup — this is how you train that.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== WEDNESDAY ==================== -->
+<div class="day-content" id="day-wed">
+  <div class="day-header">
+    <div class="day-tag" style="color:#10B981">WEDNESDAY · NO SKATE — FULL CNS AVAILABLE</div>
+    <div class="day-title">Athletic Performance</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift + Speed est. 90 min</span>
+      <span class="day-meta-item">+ Lactate threshold 25 min</span>
+      <span class="day-meta-item">Total ~115 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Blocks <span>A–E</span></div>
+    <div class="summary-chip">Most important day of the week</div>
+    <div class="summary-chip">Speed + Power + Lateral + LT Conditioning</div>
+  </div>
+
+  <div class="section-divider">SPEED + ACCELERATION — ALWAYS FIRST, CNS IS FRESHEST</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#10B98122;color:#10B981">A</div><div><div class="block-name">Speed + Acceleration + Change of Direction</div><div class="block-type">Straight sets · 90s between sets · Max intent every single rep</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Sprint Acceleration</td><td class="ex-sets">6×20yds</td><td class="ex-load">BW</td><td class="ex-note">Drive phase only — not top speed. Stay low, push back not up. First 3 steps are everything. Each rep is a max effort. Walk back to start — full recovery.</span></td></tr>
+    <tr><td class="ex-name">Resisted Sprint (band)</td><td class="ex-sets">4×15yds</td><td class="ex-load">Light band</td><td class="ex-note">Partner holds band at hips or anchor to post. Forces hip drive and forward lean. Short distance — quality only. Full recovery between reps.</td></tr>
+    <tr><td class="ex-name">Pro Agility Shuttle (5-10-5)</td><td class="ex-sets">6×1</td><td class="ex-load">BW</td><td class="ex-note">Time yourself every rep — write the time down. 5 yards one way, 10 back, 5 to finish. Low centre of gravity on cuts. This is pure hockey athleticism. 2 min rest between each.</td></tr>
+    <tr><td class="ex-name">Broad Jumps</td><td class="ex-sets">3×5</td><td class="ex-load">BW</td><td class="ex-note">Max horizontal distance every jump. Swing arms, load hips, drive forward. Full reset between reps. Sagittal plane power needs its own dedicated work.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">ROTATIONAL POWER BLOCK</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#10B98122;color:#10B981">B</div><div><div class="block-name">Rotational Power</div><div class="block-type">Circuit · Slam → 60s → Scoop → 60s → Overhead → 60s → Landmine → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Med Ball Rotational Slam</td><td class="ex-sets">4×6e</td><td class="ex-load">12–15 lbs</td><td class="ex-note">Full trunk rotation. Load the hips, not just the arms. Slam with the whole body. This is your shot power, pass power, and board battle power being trained directly.</td></tr>
+    <tr><td class="ex-name">Med Ball Side Scoop Toss</td><td class="ex-sets">3×8e</td><td class="ex-load">10 lbs</td><td class="ex-note">Hip-loaded lateral power. Against wall. Start from low squat position — drive through hips, not arms. Explosive release.</td></tr>
+    <tr><td class="ex-name">Med Ball Overhead Throw for Height</td><td class="ex-sets">3×5</td><td class="ex-load">10 lbs</td><td class="ex-note">Pure hip extension power. Full squat load, then full triple extension at release — throw as high as possible. This directly transfers to first-step explosion on the ice.</td></tr>
+    <tr><td class="ex-name">Landmine Rotational Press</td><td class="ex-sets">3×8e</td><td class="ex-load">35–45 lbs</td><td class="ex-note">Load the rotation pattern under resistance. Opposite foot forward. Full hip turn drives the press — it's not a shoulder exercise, it's a whole-body rotational exercise.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">LATERAL POWER BLOCK</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#10B98122;color:#10B981">C</div><div><div class="block-name">Lateral Power</div><div class="block-type">Straight sets · 90s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Skater Bounds</td><td class="ex-sets">4×8e</td><td class="ex-load">BW</td><td class="ex-note">Max lateral distance every bound. One leg landing — stick it and hold 1 second before going again. Mimics exact edge-to-edge skating mechanics. This is your on-ice speed being built off-ice.</td></tr>
+    <tr><td class="ex-name">Lateral Band Walk</td><td class="ex-sets">3×15e</td><td class="ex-load">Heavy band</td><td class="ex-note">Low athletic stance. Band above knees. Steps controlled — don't let feet come together. Glute med and hip abductor activation. The muscle that stabilises every skating stride.</td></tr>
+    <tr><td class="ex-name">Lateral Box Step-Up</td><td class="ex-sets">3×8e</td><td class="ex-load">50–55 lbs</td><td class="ex-note">Step up laterally — hip drives up, knee follows. Full extension at top. This is the hockey stride pattern under load. 50+ lbs — you belt squat 360, this needs to be challenging.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">POWER LOWER COMPLEX</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#10B98122;color:#10B981">D</div><div><div class="block-name">Trap Bar Power Complex</div><div class="block-type">Complex · Deadlift → immediately → Jumps → 2.5 min full rest → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Trap Bar Deadlift</td><td class="ex-sets">4×4</td><td class="ex-load">Heavy</td><td class="ex-note">Explosive off floor every rep. Max intent — not a slow grind. Hips and shoulders rise at the same rate. Most important strength movement for skating power.</td></tr>
+    <tr><td class="ex-name">Trap Bar Jumps (immediately after)</td><td class="ex-sets">4×4</td><td class="ex-load">25% of DL max</td><td class="ex-note">No rest after deadlift. Immediately load light and jump. Post-activation potentiation — the nervous system is maximally primed from the heavy pull. Pure power expression.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">CORE BLOCK</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#10B98122;color:#10B981">E</div><div><div class="block-name">Core</div><div class="block-type">Circuit · Leg Raise → 45s → L-Sit → 45s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Hanging Leg Raise</td><td class="ex-sets">3×12</td><td class="ex-load">BW</td><td class="ex-note">Slow and completely controlled. No swinging — if you're swinging, stop, reset. Pull knees up with hip flexors. Lower with control. Every rep with intent.</td></tr>
+    <tr><td class="ex-name">L-Sit Hold</td><td class="ex-sets">3×20s</td><td class="ex-load">BW</td><td class="ex-note">Tuck position to start. Push the floor away — arms straight. Progress toward full leg extension over the 6 weeks. Entire posterior chain and core under simultaneous tension.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">HIP + THORACIC MOBILITY — END OF SESSION</div>
+  <div class="special-box mobility">
+    <div class="box-title" style="color:#10B981;">HIP + THORACIC MOBILITY · 10 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>90/90 hip switch</strong> — 2 min continuous. Rotate through both sides fluidly. This is your most important mobility work as a hockey player.</span>
+      <span class="step"><strong>Thoracic rotations</strong> — seated or quadruped. 1 min each side. Open the thoracic spine that hockey closes down.</span>
+      <span class="step"><strong>Pigeon stretch</strong> — 1 min each side. Deep hip external rotation. Hold without bouncing.</span>
+      <span class="step"><strong>Adductor rock</strong> — 1 min each side. Groin flexibility is your biggest injury risk as a skater. This protects it.</span>
+      <span class="step"><strong>Hip circles</strong> — 1 min. Full range in both directions. End of session hip capsule work.</span>
+    </div>
+  </div>
+
+  <div class="section-divider">LACTATE THRESHOLD CONDITIONING — AFTER MOBILITY</div>
+  <div class="special-box lactate">
+    <div class="box-title" style="color:#EF4444;">LACTATE THRESHOLD INTERVALS · BIKE OR ROWER · ~25 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Warm-up:</strong> 3 min easy at 50% effort.</span>
+      <span class="step"><strong>Work intervals:</strong> <strong>4 rounds</strong> of <strong>3 min at 85–90% max HR</strong> → <strong>3 min active recovery at 50%</strong>. That's your lactate threshold zone — the exact energy system a 45-second hockey shift taxes.</span>
+      <span class="step"><strong>Heart rate target:</strong> 160–175 BPM during work intervals. If you don't have a monitor — you should be able to say 3–4 words before needing a breath. Uncomfortable but controlled.</span>
+      <span class="step"><strong>Cool-down:</strong> 3 min easy pedalling. Don't stop abruptly.</span>
+      <span class="step"><strong>Total time:</strong> 3 + (3+3)×4 + 3 = ~30 min.</span>
+      <span class="step"><strong>Progression:</strong> Week 1–2: 4 intervals. Week 3–4: 5 intervals. Week 5–6: 6 intervals.</span>
+      <span class="step"><strong>Why this is critical:</strong> Lactate threshold is the single biggest predictor of repeated shift performance. This is what makes you as dangerous in the third period as the first.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== THURSDAY ==================== -->
+<div class="day-content" id="day-thu">
+  <div class="day-header">
+    <div class="day-tag" style="color:#F59E0B">THURSDAY · SKATE MORNING → LIFT AFTERNOON</div>
+    <div class="day-title">Full Upper Body — Strength + Carries</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift est. 85 min</span>
+      <span class="day-meta-item">+ Aerobic base 20 min</span>
+      <span class="day-meta-item">Total ~105 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Blocks <span>A–G</span></div>
+    <div class="summary-chip">Anchor <span>OHP 5×5</span></div>
+    <div class="summary-chip">Different angles from Monday</div>
+  </div>
+
+  <div class="section-divider">STRENGTH BLOCKS</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">A</div><div><div class="block-name">Heavy Push</div><div class="block-type">Straight sets · 2 min rest between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Overhead Press (Barbell)</td><td class="ex-sets">5×5</td><td class="ex-load">105–115 lbs</td><td class="ex-note">Strict — absolutely no leg drive. Brace core like you're about to take a hit. Add 5 lbs weekly. This is the fastest way to close your upper body power gap. Overhead strength transfers directly to board battles and clearing the crease.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">B</div><div><div class="block-name">Heavy Pull</div><div class="block-type">Straight sets · 2 min rest between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Weighted Pull-Ups</td><td class="ex-sets">5×5</td><td class="ex-load">+20–25 lbs</td><td class="ex-note">Neutral grip — different from Monday's pronated grip. Heavier than last week every session. Dead hang. Full lat engagement at the bottom before pulling.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">C</div><div><div class="block-name">Accessory Push + Pull</div><div class="block-type">Superset · Incline → 90s → Row → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Incline Barbell Press</td><td class="ex-sets">4×8</td><td class="ex-load">135–145 lbs</td><td class="ex-note">Upper chest emphasis — different from Monday's DB. Heavier load possible with barbell. Control the descent. Full range.</td></tr>
+    <tr><td class="ex-name">DB Single Arm Row</td><td class="ex-sets">4×10e</td><td class="ex-load">75–80 lbs</td><td class="ex-note">Chest supported on bench. Heavy. Full range of motion — full stretch at bottom, full retraction at top. No torso rotation cheat.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">D</div><div><div class="block-name">Accessory Push + Arm</div><div class="block-type">Superset · Dips set → 60s → Curls set → 60s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Weighted Dips</td><td class="ex-sets">3×8</td><td class="ex-load">+30–35 lbs</td><td class="ex-note">Heavier than Monday. Belt loaded. Full range — no half reps. Chest slightly forward.</td></tr>
+    <tr><td class="ex-name">DB Hammer Curls</td><td class="ex-sets">3×12</td><td class="ex-load">35 lbs</td><td class="ex-note">Brachialis and bicep thickness. No swinging — strict form. Controlled eccentric on the way down.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">E</div><div><div class="block-name">Shoulder Health + Trap</div><div class="block-type">Circuit · Lateral → 60s → Face Pull → 60s → Shrugs → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">DB Lateral Raise</td><td class="ex-sets">3×15</td><td class="ex-load">20 lbs</td><td class="ex-note">Slow — no swinging or momentum. Feel the lateral delt working. Shoulder width and health.</td></tr>
+    <tr><td class="ex-name">Face Pulls</td><td class="ex-sets">3×15</td><td class="ex-load">Band</td><td class="ex-note">Rear delt and external rotation health. Pull to face — elbows high. Both upper days get this. Non-negotiable for shoulder longevity.</td></tr>
+    <tr><td class="ex-name">Barbell Shrugs</td><td class="ex-sets">3×12</td><td class="ex-load">205–225 lbs</td><td class="ex-note">Second trap exposure this week. Full squeeze at top, 1s hold. Traps twice a week builds the protective muscle mass around your neck and upper spine.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">F</div><div><div class="block-name">Carries + Grip</div><div class="block-type">Straight sets · 90s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">DB Farmer Carries</td><td class="ex-sets">4×40yds</td><td class="ex-load">80–90 lbs each</td><td class="ex-note">As heavy as possible. Tall posture — don't let shoulders round or hunch. Grip strength directly translates to stick control and board battles.</td></tr>
+    <tr><td class="ex-name">Suitcase Carry</td><td class="ex-sets">3×30yds e</td><td class="ex-load">70–80 lbs</td><td class="ex-note">Single arm only. Don't lean into the weight — that defeats the purpose. Anti-lateral flexion core strength. Walk tall.</td></tr>
+    <tr><td class="ex-name">Forearm Rolls</td><td class="ex-sets">3×3</td><td class="ex-load">Roller</td><td class="ex-note">Full extension rolling out, full contraction rolling back. Grip and forearm endurance. Wrist strength for shooting.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#F59E0B22;color:#F59E0B">G</div><div><div class="block-name">Core + Rotation</div><div class="block-type">Circuit · Landmine → 60s → Plank → 60s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Landmine Rotational Press</td><td class="ex-sets">3×8e</td><td class="ex-load">35–45 lbs</td><td class="ex-note">Rotation on every upper day. Every single upper session includes rotation because hockey is a rotational sport and your pressing pattern should reflect that.</td></tr>
+    <tr><td class="ex-name">Elbow Plank</td><td class="ex-sets">3×1min</td><td class="ex-load">BW</td><td class="ex-note">Full body tension — squeeze glutes, ribs down, posterior pelvic tilt. If you're not shaking by 45 seconds you're not bracing hard enough.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">SHOULDER MOBILITY — END OF SESSION</div>
+  <div class="special-box mobility">
+    <div class="box-title" style="color:#F59E0B;">SHOULDER MOBILITY · 5 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Shoulder pass-throughs</strong> (band or stick) — 2×10. Thoracic extension.</span>
+      <span class="step"><strong>Band pull-aparts</strong> — 2×15. Rear delt and rhomboid activation.</span>
+      <span class="step"><strong>Cross-body stretch</strong> — 30s each side. Posterior capsule.</span>
+      <span class="step"><strong>Wrist mobility</strong> — circles, push-ups on fists, prayer stretch. 60s total.</span>
+    </div>
+  </div>
+
+  <div class="section-divider">AEROBIC BASE CONDITIONING — AFTER LIFT</div>
+  <div class="special-box aerobic">
+    <div class="box-title" style="color:#3B82F6;">AEROBIC BASE · STATIONARY BIKE · 20 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Target heart rate:</strong> 130–145 BPM (65–70% max HR). Same protocol as Monday — low intensity, steady state, controlled.</span>
+      <span class="step"><strong>Protocol:</strong> 3 min easy warm-up → 14 min steady state at target HR → 3 min easy cool-down.</span>
+      <span class="step"><strong>Key rule:</strong> Never go above 150 BPM. If HR climbs, reduce resistance. This is aerobic development, not cardio training.</span>
+      <span class="step"><strong>Combined with Monday's session:</strong> Two aerobic base sessions per week (Mon + Thu) builds the cardiovascular infrastructure that makes your CO2 work and lactate threshold intervals compound in effectiveness.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FRIDAY ==================== -->
+<div class="day-content" id="day-fri">
+  <div class="day-header">
+    <div class="day-tag" style="color:#8B5CF6">FRIDAY · SKATE MORNING → LIFT AFTERNOON</div>
+    <div class="day-title">Lower Hypertrophy + Posterior Chain</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift est. 90–95 min</span>
+      <span class="day-meta-item">CO2 conditioning included</span>
+      <span class="day-meta-item">Total ~110 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Blocks <span>A–G</span></div>
+    <div class="summary-chip">Anchor <span>Hip Thrust 5×8</span></div>
+    <div class="summary-chip">Glutes + Hamstrings + Unilateral</div>
+  </div>
+
+  <div class="section-divider">EXPLOSIVE OPENER — FAST TWITCH SIGNAL BEFORE VOLUME</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">A</div><div><div class="block-name">Explosive Opener</div><div class="block-type">Straight sets · 90s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Jump Squats</td><td class="ex-sets">3×8</td><td class="ex-load">BW</td><td class="ex-note">Done before activation — this is the fast twitch neurological signal. Even on a hypertrophy day after a morning skate, the legs need to be told to be explosive. Max intent each rep. Full extension at top.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">ACTIVATION — SAFELY PRIME POSTERIOR CHAIN AFTER MORNING SKATE</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">B</div><div><div class="block-name">Posterior Activation</div><div class="block-type">Superset · Bridge → 60s → Band Walk → 60s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Glute Bridge Barbell Walkout</td><td class="ex-sets">3×10</td><td class="ex-load">95 lbs</td><td class="ex-note">Safe, controlled posterior chain activation. After a morning skate your legs are already loaded — this primes the glutes and hamstrings for the heavy work ahead without adding CNS fatigue.</td></tr>
+    <tr><td class="ex-name">Lateral Band Walk</td><td class="ex-sets">3×15e</td><td class="ex-load">Heavy band</td><td class="ex-note">Glute med activation. Low athletic stance — stay low the whole time. Don't let feet come together. Knees track over toes.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">STRENGTH + HYPERTROPHY BLOCKS</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">C</div><div><div class="block-name">Heavy Posterior</div><div class="block-type">Superset · Hip Thrust → 90s → GHD Curl → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Barbell Hip Thrust</td><td class="ex-sets">5×8</td><td class="ex-load">225–245 lbs</td><td class="ex-note">This is your skating power engine being directly trained. Drive through heels — toes can come off the floor slightly. 2 full seconds squeeze at top. Don't rush the top position. Add 5–10 lbs every two weeks.</td></tr>
+    <tr><td class="ex-name">GHD Hamstring Curl</td><td class="ex-sets">4×8</td><td class="ex-load">BW</td><td class="ex-note">Slow and controlled through full range. Brutal on the posterior chain. Never rush this movement — the eccentric (lowering) phase is where the adaptation happens.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">D</div><div><div class="block-name">Unilateral Lower</div><div class="block-type">Superset · Step-Up → 90s → SL Hip Thrust → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Weighted Step-Ups</td><td class="ex-sets">3×10e</td><td class="ex-load">40–45 lbs</td><td class="ex-note">Drive knee high at top. Full extension of standing leg. This is the hockey stride pattern loaded — the plant-and-drive motion of every skating push.</td></tr>
+    <tr><td class="ex-name">Single Leg Hip Thrust</td><td class="ex-sets">3×10e</td><td class="ex-load">BW</td><td class="ex-note">Upper back on bench. One foot planted, one in the air. 2 second squeeze at top — don't rush. Don't let non-working hip drop. Glute isolation at its most effective.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">E</div><div><div class="block-name">Injury Prevention</div><div class="block-type">Superset · Nordic → 90s → GHD Extension → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Nordic Hamstring Fall</td><td class="ex-sets">3×8</td><td class="ex-load">BW</td><td class="ex-note">Second exposure this week. As slow as humanly possible on the fall — fight gravity the entire way down. Use hands to catch. Pull back with hamstrings as much as you can. This exercise keeps you on the ice. 3×8 — never drop below.</td></tr>
+    <tr><td class="ex-name">GHD Hip Extensions</td><td class="ex-sets">3×12</td><td class="ex-load">+35 lbs</td><td class="ex-note">Heavier than Tuesday. Full extension at top — hard glute squeeze. Complete range of motion from deep flexion to full extension.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">F</div><div><div class="block-name">Calf</div><div class="block-type">Straight sets · 60s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">SL Calf Raises (Stepbox)</td><td class="ex-sets">4×15</td><td class="ex-load">BW</td><td class="ex-note">On a plate or step for full range — complete stretch at the bottom, full contraction at top. Slow — feel every inch of the range. Calf strength directly impacts ankle stability on skates.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#8B5CF622;color:#8B5CF6">G</div><div><div class="block-name">Core</div><div class="block-type">Circuit · GHD → 45s → Corkscrew → 45s → Leg Raise → 45s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">GHD Sit-Ups</td><td class="ex-sets">3×15</td><td class="ex-load">BW</td><td class="ex-note">Full range — touch floor behind you at the bottom. Use the GHD for full hyperextension. Complete hip flexor and core range of motion.</td></tr>
+    <tr><td class="ex-name">Corkscrew</td><td class="ex-sets">3×10</td><td class="ex-load">BW</td><td class="ex-note">Hanging. Raise legs to horizontal, then rotate hips — lift hips up and rotate like a corkscrew. Oblique and deep core. Slow and controlled throughout.</td></tr>
+    <tr><td class="ex-name">Hanging Leg Raise</td><td class="ex-sets">3×12</td><td class="ex-load">BW</td><td class="ex-note">Slow. No swinging. If you're swinging, you're using momentum not muscle. Full control on the descent.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">CO2 CONDITIONING — FINISHER</div>
+  <div class="special-box co2">
+    <div class="box-title" style="color:#F59E0B;">CO2 TOLERANCE · STATIONARY BIKE · 10 ROUNDS · ~20 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Round structure:</strong> <strong>30s</strong> climb at high resistance → <strong>15s</strong> easy recovery → <strong>15s</strong> breath hold at medium resistance → 15s rest → repeat</span>
+      <span class="step"><strong>End of week:</strong> You'll be tired. Do it anyway. The adaptation happens when you push through it tired — that's exactly the state you're in during the third period.</span>
+      <span class="step"><strong>Progression:</strong> Same as Tuesday — Week 1: 8 rounds. Week 2+: 10 rounds. Week 4+: extend climb to 35s.</span>
+    </div>
+  </div>
+
+  <div class="section-divider">HIP FLEXOR + GROIN MOBILITY — NON-NEGOTIABLE</div>
+  <div class="special-box mobility">
+    <div class="box-title" style="color:#8B5CF6;">HIP FLEXOR + GROIN · 10 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Couch stretch</strong> — 2 min each side. Hip flexor at full length. Biggest tight spot for a hockey player. Don't rush this.</span>
+      <span class="step"><strong>90/90 hip switch</strong> — 2 min continuous. Both directions.</span>
+      <span class="step"><strong>Adductor rock</strong> — 1 min each side. Groin health. This is your most common hockey injury site.</span>
+      <span class="step"><strong>Pigeon stretch</strong> — 1 min each side. Deep hip external rotation release.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SATURDAY ==================== -->
+<div class="day-content" id="day-sat">
+  <div class="day-header">
+    <div class="day-tag" style="color:#EC4899">SATURDAY · NO SKATE — MAX EFFORT DAY</div>
+    <div class="day-title">Full Body Power + Conditioning</div>
+    <div class="day-meta">
+      <span class="day-meta-item">Lift est. 95 min</span>
+      <span class="day-meta-item">+ Repeat sprint protocol 15 min</span>
+      <span class="day-meta-item">Total ~110 min</span>
+    </div>
+  </div>
+  <div class="summary-bar">
+    <div class="summary-chip">Blocks <span>A–G</span></div>
+    <div class="summary-chip">Hardest session of the week</div>
+    <div class="summary-chip">Power + Upper + Conditioning</div>
+  </div>
+
+  <div class="section-divider">POWER COMPLEX — ALWAYS FIRST</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">A</div><div><div class="block-name">Power Complex</div><div class="block-type">Complex · Clean → immediately → Box Jump → 3 min full rest → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Hang Clean</td><td class="ex-sets">5×3</td><td class="ex-load">115–135 lbs</td><td class="ex-note">Full triple extension — the most important athletic movement in this program. Hips, knees, ankles all extending in sequence. Explosive off the hang position. If form breaks, lower the weight.</td></tr>
+    <tr><td class="ex-name">Box Jump (immediately after clean)</td><td class="ex-sets">5×3</td><td class="ex-load">BW</td><td class="ex-note">Zero rest after the clean. Step off bar, immediately jump. The nervous system is maximally primed from the clean — this is post-activation potentiation. Max height every jump.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">EXPLOSIVE LOWER + UPPER STRENGTH</div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">B</div><div><div class="block-name">Explosive Lower</div><div class="block-type">Superset · Trap Bar DL → 2 min → Skater Bound → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Trap Bar Deadlift</td><td class="ex-sets">4×4</td><td class="ex-load">Heavy — PR attempt</td><td class="ex-note">Max intent off floor every rep. Heavier than Wednesday — this is your weekly strength test and PR attempt. Hips and shoulders rise at the same rate. This is the most powerful position your body can be in.</td></tr>
+    <tr><td class="ex-name">Skater Bounds</td><td class="ex-sets">3×6e</td><td class="ex-load">BW</td><td class="ex-note">Second exposure this week. Push lateral distance further than Wednesday. Stick every landing — 1s hold before the next bound.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">C</div><div><div class="block-name">Upper Strength</div><div class="block-type">Superset · Bench → 90s → Pull-Up → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Barbell Bench Press</td><td class="ex-sets">4×6</td><td class="ex-load">165–175 lbs</td><td class="ex-note">Heavier than Monday. This is your weekly bench PR attempt. You have full CNS today — use it. 4×6 means controlled reps at a weight that challenges you on sets 3 and 4.</td></tr>
+    <tr><td class="ex-name">Weighted Pull-Ups</td><td class="ex-sets">4×6</td><td class="ex-load">+25 lbs</td><td class="ex-note">Wide grip for lat width — different from Mon (pronated) and Thu (neutral). Heavier than both earlier in the week.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">D</div><div><div class="block-name">Posterior Chain Maintenance</div><div class="block-type">Straight sets · 90s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Barbell Hip Thrust</td><td class="ex-sets">3×8</td><td class="ex-load">185 lbs</td><td class="ex-note">Lighter than Friday — this is maintenance, not stimulus. Glutes need frequency across the week. 3 sets at moderate load keeps the pattern without draining the tank before conditioning.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">E</div><div><div class="block-name">Rotational Anchor</div><div class="block-type">Straight sets · 90s between sets</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Landmine Press</td><td class="ex-sets">3×6e</td><td class="ex-load">55 lbs</td><td class="ex-note">Heaviest landmine press of the week. Full hip turn drives the press. This closes out the rotational work that appears every upper day throughout the week.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">F</div><div><div class="block-name">Conditioning Circuit</div><div class="block-type">Circuit · Burpees → 60s → Sprints → 90s → Slams → 60s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Burpee Broad Jumps</td><td class="ex-sets">4×6</td><td class="ex-load">BW</td><td class="ex-note">Full extension at top, max distance on the broad jump. Quality — 4×6 means 24 perfect reps, not sloppy reps at the end of a hard session. Chest fully to floor each burpee.</td></tr>
+    <tr><td class="ex-name">Resisted Sprint</td><td class="ex-sets">4×20yds</td><td class="ex-load">Light band</td><td class="ex-note">Max acceleration through resistance. 90s rest between sprint sets — sprints need proper recovery to be meaningful. Second exposure this week.</td></tr>
+    <tr><td class="ex-name">Med Ball Slam</td><td class="ex-sets">3×12</td><td class="ex-load">15–20 lbs</td><td class="ex-note">Overhead — full body extension on the way up, powerful slam on the way down. End the week with intent. Let the weight hit the floor hard.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-letter" style="background:#EC489922;color:#EC4899">G</div><div><div class="block-name">Core</div><div class="block-type">Circuit · Ab Wheel → 45s → Pallof → 45s → 90s → repeat</div></div></div>
+    <table class="ex-table"><tr><th>EXERCISE</th><th>SETS×REPS</th><th>LOAD</th><th>NOTE</th></tr>
+    <tr><td class="ex-name">Ab Wheel Rollout</td><td class="ex-sets">3×10</td><td class="ex-load">BW</td><td class="ex-note">Full extension every rep. End the week as strong as you started it. Hips cannot drop.</td></tr>
+    <tr><td class="ex-name">Pallof Press</td><td class="ex-sets">3×12e</td><td class="ex-load">Red band</td><td class="ex-note">Anti-rotation. Every single week ends with this. This is your hockey core — the ability to resist rotation under pressure is what wins board battles and holds your gap in coverage.</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">REPEAT SPRINT CONDITIONING — REPLACES CO2 DRYLAND</div>
+  <div class="special-box repeat-sprint">
+    <div class="box-title" style="color:#EC4899;">REPEAT SPRINT ABILITY · TURF OR COURT · ~15 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Protocol:</strong> <strong>10 rounds</strong> of <strong>6-second all-out sprint</strong> → <strong>35 seconds rest</strong> → repeat. Total work time: 1 min. Total session: ~7 min work within 15 min block.</span>
+      <span class="step"><strong>Distance:</strong> ~15–20 yards depending on your stride. Mark start and end. Same distance every rep.</span>
+      <span class="step"><strong>Effort:</strong> Absolute maximum — 100% on every single rep. If rep 8 feels the same as rep 1, you're not going hard enough on rep 1. Rep 8 should feel brutal.</span>
+      <span class="step"><strong>Rest is incomplete by design:</strong> 35 seconds is not enough to fully recover. That's the point. You're training your ability to sprint again before you're ready — exactly what hockey demands every shift.</span>
+      <span class="step"><strong>Why this replaces CO2 dryland:</strong> CO2 dryland burpees are valuable but you already have CO2 work Tuesday and Friday. Saturday needs repeat sprint ability — the 6-second, anaerobic, maximum intensity effort that mirrors a 45-second shift's explosive moments.</span>
+      <span class="step"><strong>Progression:</strong> Week 1–2: 8 reps. Week 3–4: 10 reps. Week 5–6: 12 reps. Rest stays at 35s throughout.</span>
+    </div>
+  </div>
+
+  <div class="section-divider">FULL BODY MOBILITY — END OF WEEK</div>
+  <div class="special-box mobility">
+    <div class="box-title" style="color:#EC4899;">FULL BODY FLOW · 10 MIN</div>
+    <div class="box-content">
+      <span class="step"><strong>Hips</strong> — 90/90 switch, 2 min. Full body reset starts here.</span>
+      <span class="step"><strong>Thoracic</strong> — foam roll thoracic spine, 1 min. Open the chest and upper back.</span>
+      <span class="step"><strong>Ankles</strong> — wall ankle circles, 30s each. Skating puts enormous load on ankle dorsiflexion.</span>
+      <span class="step"><strong>Shoulders</strong> — shoulder CARs, 5 each arm. Full capsule health.</span>
+      <span class="step"><strong>Full body hang</strong> — dead hang from bar, 2×30s. Spinal decompression after a heavy week.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SUNDAY ==================== -->
+<div class="day-content" id="day-sun">
+  <div class="rest-day">
+    <div class="eyebrow">SUNDAY</div>
+    <div class="day-title">Full Recovery</div>
+    <div style="font-size:12px;color:#444460;margin-top:6px;">This day is as important as any training day. Adaptation happens during rest — not during the session.</div>
+    <div class="rest-items">
+      <div class="rest-item"><div class="rest-dot"></div>20–30 min walk at easy pace — no intensity. Blood flow without stress. Outside if possible.</div>
+      <div class="rest-item"><div class="rest-dot"></div>Full body mobility flow — hips, thoracic, ankles, shoulders. 15 min minimum. This is the day to give mobility real time.</div>
+      <div class="rest-item"><div class="rest-dot"></div>Cold shower or contrast therapy (cold/hot alternating) if available. Accelerates muscle recovery and reduces systemic inflammation.</div>
+      <div class="rest-item"><div class="rest-dot"></div>Journal — write down what moved this week (lifts, times, distances), what felt strong, what felt off, and what you want to push next week. Tracking creates accountability.</div>
+      <div class="rest-item"><div class="rest-dot"></div>9 hours sleep minimum tonight. Growth hormone is released in deep sleep. This is where the mass is actually built. No exceptions on Sunday night.</div>
+      <div class="rest-item"><div class="rest-dot"></div>Eat at or slightly above maintenance — don't undereat on rest day. Your body is rebuilding. Give it the material to work with.</div>
+      <div class="rest-item"><div class="rest-dot"></div>No screens after 10pm. Blue light suppresses melatonin by up to 2 hours. Your sleep quality — not just duration — determines recovery quality.</div>
+      <div class="rest-item"><div class="rest-dot"></div>Think about Colgate. Visualise showing up to camp different. That's what this week is building toward.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showDay(day, btn) {
+  document.querySelectorAll('.day-content').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('day-' + day).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
